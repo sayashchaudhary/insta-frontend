@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { userContext } from "../App"
 
 const Profile = () => {
+
+    const [profile, setProfile] = useState([]);
+
+    const { state, dispatch } = useContext(userContext);
+
+    useEffect(() => {
+        fetch("http://localhost:8000/profile", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+            }
+        }).then((res) => res.json())
+            .then((result) => {
+                setProfile(result.posts)
+            })
+    }, [])
+
     return (
         <div style={{ maxWidth: "70%", margin: "0px auto" }}>
             <div
@@ -18,7 +35,7 @@ const Profile = () => {
                     />
                 </div>
                 <div>
-                    <h4>Sayash Chaudhary</h4>
+                    <h4>{state ? state.name : "loading"}</h4>
                     <div
                         style={{ display: "flex", justifyContent: "space-between", width: "108%" }}
                     >
@@ -29,18 +46,16 @@ const Profile = () => {
                 </div>
             </div>
             <div className="gallery">
-                <img className="item"
-                     src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"/>
-                <img className="item"
-                     src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"/>
-                <img className="item"
-                     src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"/>
-                <img className="item"
-                     src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"/>
-                <img className="item"
-                     src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"/>
-                <img className="item"
-                     src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"/>
+                {
+                    profile.map((item) => {
+                        return (
+                            <img className="item"
+                                 src={item.photo}
+                                 align={item.title}
+                            />
+                        )
+                    })
+                }
             </div>
         </div>
     )
