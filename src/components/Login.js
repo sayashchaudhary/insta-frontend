@@ -13,7 +13,8 @@ const Login = () => {
         fetch("http://localhost:8000/signin", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
             },
             body: JSON.stringify({
                 email,
@@ -21,10 +22,11 @@ const Login = () => {
             })
         }).then((res) => res.json())
             .then((data) => {
-                console.log(data)
                 if (data.error) {
                     M.toast({ html: data.error })
                 } else {
+                    localStorage.setItem("jwt", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
                     M.toast({ html: "Signed in successfully" })
                     history.push("/")
                 }
