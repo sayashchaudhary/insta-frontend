@@ -67,6 +67,33 @@ const Home = () => {
         })
     }
 
+    const makeComment = (text, postId) => {
+        fetch("http://localhost:8000/comment", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+            },
+            body: JSON.stringify({
+                postId,
+                text
+            })
+        }).then((res) => res.json())
+            .then((result) => {
+                console.log(result)
+                const newData = data.map((item) => {
+                    if (item._id === result._id) {
+                        return result
+                    } else {
+                        return item
+                    }
+                })
+                setData(newData)
+            }).catch((err) => {
+            console.log(err)
+        })
+    }
+
     return (
         <div className="home">
             {
@@ -103,7 +130,27 @@ const Home = () => {
                                 <h6>{item.likes.length} likes</h6>
                                 <h6>{item.title}</h6>
                                 <p>{item.body}</p>
-                                <input type="text" placeholder="Add comment"/>
+                                {
+                                    item.comments.map((comment) => {
+                                        return (
+                                            <p>
+                                                <span style={{ fontWeight: "500" }}>
+                                                    {comment.postedBy.name}
+                                                </span>
+                                                {comment.text}
+                                            </p>
+                                        )
+                                    })
+                                }
+                                <form onSubmit={(event) => {
+                                    event.preventDefault();
+                                    makeComment(event.target[0].value, item._id)
+                                }}>
+                                    <input
+                                        type="text"
+                                        placeholder="Add comment"
+                                    />
+                                </form>
                             </div>
                         </div>
                     )
