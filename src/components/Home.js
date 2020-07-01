@@ -133,10 +133,10 @@ const Home = () => {
                                 {
                                     item.comments.map((comment) => {
                                         return (
-                                            <p>
-                                                <span style={{ fontWeight: "500" }}>
-                                                    {comment.postedBy.name}
-                                                </span>
+                                            <p style={{ fontWeight: "900" }}>
+                                                {/*<span style={{ fontWeight: "500" }}>*/}
+                                                {/*    {comment.postedBy.name}*/}
+                                                {/*</span>*/}
                                                 {comment.text}
                                             </p>
                                         )
