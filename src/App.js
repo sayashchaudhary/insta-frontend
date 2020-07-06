@@ -7,6 +7,7 @@ import Profile from "./components/Profile";
 import Signup from "./components/Signup";
 import CreatePost from "./components/CreatePost";
 import UserProfile from "./components/UserProfile";
+import FollowingPosts from "./components/FollowingPosts";
 import "./App.css";
 import { UserReducer, initialSate } from "./reducers/UserReducer";
 
@@ -45,6 +46,9 @@ const Routing = () => {
             </Route>
             <Route path='/profile/:userId'>
                 <UserProfile/>
+            </Route>
+            <Route path='/following/posts'>
+                <FollowingPosts/>
             </Route>
         </Switch>
     )

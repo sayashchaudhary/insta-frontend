@@ -13,6 +13,7 @@ const Navbar = () => {
             return [
                 <li><Link to="/profile">Profile</Link></li>,
                 <li><Link to="/createpost">Create Post</Link></li>,
+                <li><Link to="/following/posts">Following Posts</Link></li>,
                 <li>
                     <button
                         className="btn waves-effect waves-light login-button"

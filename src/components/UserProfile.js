@@ -51,7 +51,7 @@ const UserProfile = () => {
                         followers: result.followers
                     }]
                 })
-                setShowFollow(null)
+                setShowFollow(false)
             })
     }
 
