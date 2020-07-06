@@ -6,7 +6,7 @@ const UserProfile = () => {
 
     const [profile, setProfile] = useState(null);
 
-    const [showFollow, setShowFollow] = useState(true);
+    const [showFollow, setShowFollow] = useState();
 
     const { state, dispatch } = useContext(userContext);
 
@@ -19,7 +19,7 @@ const UserProfile = () => {
             }
         }).then((res) => res.json())
             .then((result) => {
-                console.log(result)
+                // console.log(result)
                 setProfile(result)
             })
     }, [])
@@ -36,61 +36,55 @@ const UserProfile = () => {
             })
         }).then((res) => res.json())
             .then((result) => {
-                console.log('RESULT', result)
-                console.log(profile)
-                setProfile({...profile, user: {
-                    ...profile.user,
-                        followers: [...result.followers]
-                    }})
-                // setProfile((prevState) => {
-                //     const hello = {
-                //         ...prevState,
-                //         user: {
-                //             ...prevState.user,
-                //             followers: result.followers
-                //         }
-                //     }
-                //     console.log(hello);
-                //     return hello
-                // })
-                setShowFollow(false)
+                // console.log('RESULT', result)
+                dispatch({
+                    type: "UPDATE",
+                    payload: {
+                        followers: result.followers,
+                        following: result.following
+                    }
+                })
+                setProfile({
+                    ...profile,
+                    user: [{
+                        ...profile.user[0],
+                        followers: result.followers
+                    }]
+                })
+                setShowFollow(null)
             })
     }
 
-    // const unfollowUser = () => {
-    //     fetch("http://localhost:8000/unfollow", {
-    //         method: "PUT",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Authorization": "Bearer " + localStorage.getItem("jwt")
-    //         },
-    //         body: JSON.stringify({
-    //             unfollowId: userId
-    //         })
-    //     }).then((res) => res.json())
-    //         .then((result) => {
-    //             // console.log(result)
-    //             dispatch({
-    //                 type: "UPDATE",
-    //                 payload: {
-    //                     following: result.following,
-    //                     followers: result.followers
-    //                 }
-    //             })
-    //             localStorage.setItem("user", JSON.stringify(result))
-    //             setProfile((prevState) => {
-    //                 const newFollower = prevState.user[0].followers.filter((item) => item !== result._id)
-    //                 return {
-    //                     ...prevState,
-    //                     user: {
-    //                         ...prevState.user,
-    //                         followers: newFollower
-    //                     }
-    //                 }
-    //             })
-    //             setShowFollow(true)
-    //         })
-    // }
+    const unFollowUser = () => {
+        fetch("http://localhost:8000/unfollow", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+            },
+            body: JSON.stringify({
+                unFollowId: userId
+            })
+        }).then((res) => res.json())
+            .then((result) => {
+                // console.log('RESULT', result)
+                dispatch({
+                    type: "UPDATE",
+                    payload: {
+                        followers: result.followers,
+                        following: result.following
+                    }
+                })
+                setProfile({
+                    ...profile,
+                    user: [{
+                        ...profile.user[0],
+                        followers: result.followers
+                    }]
+                })
+                setShowFollow(true)
+            })
+    }
 
     return (
         <>
@@ -115,24 +109,26 @@ const UserProfile = () => {
                             <div
                                 style={{ display: "flex", justifyContent: "space-between", width: "108%" }}
                             >
-                                {/*<h5>{profile.posts.length} posts</h5>*/}
+                                <h5>{profile.posts.length} posts</h5>
                                 <h5>{profile.user[0].followers.length} followers</h5>
                                 <h5>{profile.user[0].following.length} following</h5>
                             </div>
                             {showFollow ?
                                 <button
                                     className="btn waves-effect waves-light login-button"
+                                    style={{margin: "10px"}}
                                     onClick={() => followUser()}
                                 >
                                     Follow
                                 </button>
-                                : null
-                                // <button
-                                //     className="btn waves-effect waves-light login-button"
-                                //     onClick={() => unfollowUser()}
-                                // >
-                                //     Unfollow
-                                // </button>
+                                :
+                                <button
+                                    className="btn waves-effect waves-light login-button"
+                                    style={{margin: "10px"}}
+                                    onClick={() => unFollowUser()}
+                                >
+                                    Unfollow
+                                </button>
                             }
                         </div>
                     </div>
