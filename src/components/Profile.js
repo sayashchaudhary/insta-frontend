@@ -14,7 +14,8 @@ const Profile = () => {
             }
         }).then((res) => res.json())
             .then((result) => {
-                setProfile(result.posts)
+                console.log(result.user[0].followers)
+                setProfile(result)
             })
     }, [])
 
@@ -45,18 +46,18 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
-            <div className="gallery">
-                {
-                    profile.map((item) => {
-                        return (
-                            <img className="item"
-                                 src={item.photo}
-                                 align={item.title}
-                            />
-                        )
-                    })
-                }
-            </div>
+            {/*<div className="gallery">*/}
+            {/*    {*/}
+            {/*        profile.posts.map((item) => {*/}
+            {/*            return (*/}
+            {/*                <img className="item"*/}
+            {/*                     src={item.photo}*/}
+            {/*                     align={item.title}*/}
+            {/*                />*/}
+            {/*            )*/}
+            {/*        })*/}
+            {/*    }*/}
+            {/*</div>*/}
         </div>
     )
 };
